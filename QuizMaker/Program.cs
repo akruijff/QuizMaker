@@ -73,34 +73,36 @@
                     Console.WriteLine();
 
                     Console.Write("  Is this a correct answer to the question? [Y/N] ");
-                    Console.Write(" ");
-                    bool? isAnswerCorrect = null;
-                    while (isAnswerCorrect == null)
-                    {
-                        char c = Console.ReadKey(true).KeyChar;
-                        switch (c)
-                        {
-                            case 'Y' or 'y':
-                                isAnswerCorrect = true;
-                                break;
-                            case 'N' or 'n':
-                                isAnswerCorrect = false;
-                                break;
-                        }
-                    }
+                    bool isAwnserCorrect = ReadBool();
                     Console.WriteLine();
 
-                    double? score = null;
-                    while (score == null)
-                    {
-                        Console.Write("  Please enter a score: ");
-                        Console.Write(" ");
-                        string? s = Console.ReadLine();
-                        if (double.TryParse(s, out double result))
-                            score = result;
-                    }
+                    Console.Write("  Please enter a score: ");
+                    double score = ReadDouble();
                     Console.WriteLine();
                 }
+            }
+        }
+
+        private static bool ReadBool()
+        {
+            while (true)
+            {
+                char c = Console.ReadKey(true).KeyChar;
+                switch (c)
+                {
+                    case 'Y' or 'y': return true;
+                    case 'N' or 'n': return false;
+                }
+            }
+        }
+
+        private static double ReadDouble()
+        {
+            while (true)
+            {
+                string? s = Console.ReadLine();
+                if (double.TryParse(s, out double result))
+                    return result;
             }
         }
 
