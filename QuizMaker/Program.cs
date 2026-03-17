@@ -52,7 +52,58 @@
             }
         }
 
-        static void AddNewQuiz() => throw new NotImplementedException();
+        static void AddNewQuiz()
+        {
+            while (true)
+            {
+                Console.WriteLine("Please enter a question (leave empty to store the quiz): ");
+                string? question = Console.ReadLine();
+                if (question is null or "")
+                    break;
+                Console.WriteLine();
+
+                while (true)
+                {
+                    Console.WriteLine($"  Q: {question}");
+                    Console.WriteLine("  Please enter a(nother) answer (leave empty to enter new question): ");
+                    Console.Write("  ");
+                    string? answer = Console.ReadLine();
+                    if (answer is null or "")
+                        break;
+                    Console.WriteLine();
+
+                    Console.Write("  Is this a correct answer to the question? [Y/N] ");
+                    Console.Write(" ");
+                    bool? isAnswerCorrect = null;
+                    while (isAnswerCorrect == null)
+                    {
+                        char c = Console.ReadKey(true).KeyChar;
+                        switch (c)
+                        {
+                            case 'Y' or 'y':
+                                isAnswerCorrect = true;
+                                break;
+                            case 'N' or 'n':
+                                isAnswerCorrect = false;
+                                break;
+                        }
+                    }
+                    Console.WriteLine();
+
+                    double? score = null;
+                    while (score == null)
+                    {
+                        Console.Write("  Please enter a score: ");
+                        Console.Write(" ");
+                        string? s = Console.ReadLine();
+                        if (double.TryParse(s, out double result))
+                            score = result;
+                    }
+                    Console.WriteLine();
+                }
+            }
+        }
+
         static void PlayAQuiz() => throw new NotImplementedException();
     }
 }
