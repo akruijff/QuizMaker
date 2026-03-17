@@ -37,6 +37,35 @@
         {
             Console.WriteLine("QuizMaker");
             Console.WriteLine();
+
+            bool isExitRequested = false;
+            while(!isExitRequested)
+            {
+                Console.WriteLine("Menu:");
+                Console.WriteLine("0 - Exit");
+                Console.WriteLine("1 - Add new quiz");
+                Console.WriteLine("2 - Play a quiz");
+                Console.WriteLine();
+                Console.Write("Please pick an option: ");
+                char c = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+                Console.WriteLine();
+                switch (c)
+                {
+                    case '0':
+                        isExitRequested = true;
+                        break;
+                    case '1':
+                        AddNewQuiz();
+                        break;
+                    case '2':
+                        PlayAQuiz();
+                        break;
+                }
+            }
         }
+
+        static void AddNewQuiz() => throw new NotImplementedException();
+        static void PlayAQuiz() => throw new NotImplementedException();
     }
 }
