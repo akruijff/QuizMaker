@@ -54,33 +54,49 @@
 
         static void AddNewQuiz()
         {
+            var quiz = new Quiz();
             while (true)
             {
                 Console.WriteLine("Please enter a question (leave empty to store the quiz): ");
-                string? question = Console.ReadLine();
-                if (question is null or "")
+                Question? question = ReadQuestion();
+                if (question is null)
                     break;
                 Console.WriteLine();
 
                 while (true)
                 {
-                    Console.WriteLine($"  Q: {question}");
+                    Console.WriteLine($"  Q: {question.Text}");
                     Console.WriteLine("  Please enter a(nother) answer (leave empty to enter new question): ");
                     Console.Write("  ");
-                    string? answer = Console.ReadLine();
-                    if (answer is null or "")
+                    Answer? answer = ReadAwnser();
+                    if (answer is null)
                         break;
                     Console.WriteLine();
 
                     Console.Write("  Is this a correct answer to the question? [Y/N] ");
-                    bool isAwnserCorrect = ReadBool();
+                    answer.IsAnswerCorrect = ReadBool();
                     Console.WriteLine();
 
                     Console.Write("  Please enter a score: ");
-                    double score = ReadDouble();
+                    answer.Score = ReadDouble();
                     Console.WriteLine();
+
+                    question.Add(answer);
                 }
+                quiz.Add(question);
             }
+        }
+
+        private static Question? ReadQuestion()
+        {
+            string? s = Console.ReadLine();
+            return s is null or "" ? null : new Question(s);
+        }
+
+        private static Answer? ReadAwnser()
+        {
+            string? s = Console.ReadLine();
+            return s is null or "" ? null : new Answer(s);
         }
 
         private static bool ReadBool()
