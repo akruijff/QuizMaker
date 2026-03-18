@@ -58,7 +58,7 @@
             while (true)
             {
                 Console.WriteLine("Please enter a question (leave empty to store the quiz): ");
-                Question? question = ReadQuestion();
+                Question? question = UI.ReadQuestion();
                 if (question is null)
                     break;
                 Console.WriteLine();
@@ -68,17 +68,17 @@
                     Console.WriteLine($"  Q: {question.Text}");
                     Console.WriteLine("  Please enter a(nother) answer (leave empty to enter new question): ");
                     Console.Write("  ");
-                    Answer? answer = ReadAwnser();
+                    Answer? answer = UI.ReadAwnser();
                     if (answer is null)
                         break;
                     Console.WriteLine();
 
                     Console.Write("  Is this a correct answer to the question? [Y/N] ");
-                    answer.IsAnswerCorrect = ReadBool();
+                    answer.IsAnswerCorrect = UI.ReadBool();
                     Console.WriteLine();
 
                     Console.Write("  Please enter a score: ");
-                    answer.Score = ReadDouble();
+                    answer.Score = UI.ReadDouble();
                     Console.WriteLine();
 
                     question.Add(answer);
@@ -87,41 +87,6 @@
             }
             if (quiz.Questions.Count > 0)
                 Persistence.SaveQuiz(quiz);
-        }
-
-        private static Question? ReadQuestion()
-        {
-            string? s = Console.ReadLine();
-            return s is null or "" ? null : new Question(s);
-        }
-
-        private static Answer? ReadAwnser()
-        {
-            string? s = Console.ReadLine();
-            return s is null or "" ? null : new Answer(s);
-        }
-
-        private static bool ReadBool()
-        {
-            while (true)
-            {
-                char c = Console.ReadKey(true).KeyChar;
-                switch (c)
-                {
-                    case 'Y' or 'y': return true;
-                    case 'N' or 'n': return false;
-                }
-            }
-        }
-
-        private static double ReadDouble()
-        {
-            while (true)
-            {
-                string? s = Console.ReadLine();
-                if (double.TryParse(s, out double result))
-                    return result;
-            }
         }
 
         static void PlayAQuiz() => throw new NotImplementedException();
