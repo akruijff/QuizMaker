@@ -10,5 +10,12 @@ namespace QuizMaker
             XmlSerializer serializer = new XmlSerializer(quiz.GetType());
             serializer.Serialize(file, quiz);
         }
+
+        public static Quiz? ReadQuiz()
+        {
+            using FileStream file = File.OpenRead("quiz.xml");
+            XmlSerializer serializer = new XmlSerializer(typeof(Quiz));
+            return serializer.Deserialize(file) as Quiz;
+        }
     }
 }
