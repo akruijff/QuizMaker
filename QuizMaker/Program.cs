@@ -2,6 +2,8 @@
 {
     internal class Program
     {
+        private static string FILE = "quiz.xml";
+
         /*
          * What program has multiple choices, random questions and user scoring? A quiz maker program! Design a 
          * program which asks the user for a list of questions, multiple choice answers for each question and the 
@@ -86,12 +88,12 @@
                 quiz.Add(question);
             }
             if (quiz.Questions.Count > 0)
-                Persistence.SaveQuiz(quiz);
+                Persistence.SaveQuiz(quiz, FILE);
         }
 
         static void PlayAQuiz()
         {
-            Quiz? quiz = Persistence.ReadQuiz();
+            Quiz? quiz = Persistence.ReadQuiz(FILE);
             if (quiz is null)
             {
                 Console.WriteLine("There is no quiz stored. Please enter a quiz first.");

@@ -4,18 +4,18 @@ namespace QuizMaker
 {
     public class Persistence
     {
-        public static void SaveQuiz(Quiz quiz)
+        public static void SaveQuiz(Quiz quiz, string file)
         {
-            using FileStream file = File.Create("quiz.xml");
+            using FileStream f = File.Create(file);
             XmlSerializer serializer = new XmlSerializer(quiz.GetType());
-            serializer.Serialize(file, quiz);
+            serializer.Serialize(f, quiz);
         }
 
-        public static Quiz? ReadQuiz()
+        public static Quiz? ReadQuiz(string file)
         {
-            using FileStream file = File.OpenRead("quiz.xml");
+            using FileStream f = File.OpenRead(file);
             XmlSerializer serializer = new XmlSerializer(typeof(Quiz));
-            return serializer.Deserialize(file) as Quiz;
+            return serializer.Deserialize(f) as Quiz;
         }
     }
 }
