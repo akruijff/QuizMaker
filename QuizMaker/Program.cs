@@ -89,6 +89,15 @@
                 Persistence.SaveQuiz(quiz);
         }
 
-        static void PlayAQuiz() => throw new NotImplementedException();
+        static void PlayAQuiz()
+        {
+            Quiz? quiz = Persistence.ReadQuiz();
+            if (quiz is null)
+            {
+                Console.WriteLine("There is no quiz stored. Please enter a quiz first.");
+                return;
+            }
+            throw new NotImplementedException();
+        }
     }
 }
