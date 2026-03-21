@@ -3,13 +3,13 @@
     public class Question
     {
         public string Text { get; set; } = "";
-        public readonly List<Answer> _answers = [];
+        public readonly List<Answer> Answers = [];
 
         public Question() { }
         public Question(string s) { Text = s; }
 
         public override bool Equals(object? obj) => obj is Question other ? Text == other.Text : false;
         public override int GetHashCode() => Text?.GetHashCode() ?? 0;
-        public void Add(Answer anwser) => _answers.Add(anwser);
+        public void Add(Answer anwser) => Answers.Add(anwser);
     }
 }

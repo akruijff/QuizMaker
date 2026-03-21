@@ -44,7 +44,7 @@
             var menu = new Menu("Menu:");
             menu.AddMenuItem('0', "Exit", () => isExitRequested = true);
             menu.AddMenuItem('1', "New quiz", NewQuiz);
-            menu.AddMenuItem('2', "Play quiz", PlayAQuiz);
+            menu.AddMenuItem('2', "Play quiz", PlayQuiz);
 
             while (!isExitRequested)
             {
@@ -91,7 +91,7 @@
                 Persistence.SaveQuiz(quiz, FILE);
         }
 
-        static void PlayAQuiz()
+        static void PlayQuiz()
         {
             Quiz? quiz = Persistence.ReadQuiz(FILE);
             if (quiz is null)
@@ -99,7 +99,66 @@
                 Console.WriteLine("There is no quiz stored. Please enter a quiz first.");
                 return;
             }
-            throw new NotImplementedException();
+
+            int i = 0;
+            double score = 0;
+            IEnumerable<Question> questions = quiz.Questions.Shuffle();
+            foreach (Question q in questions)
+                score += PlayQuestion(q, ++i, questions.Count());
+
+            Console.WriteLine("FIN");
+            Console.WriteLine($"You're score is: {score}");
+            Console.WriteLine();
+
+            Console.WriteLine("Press any key to continue to the menu");
+            Console.ReadKey(true);
+            Console.WriteLine();
+        }
+
+        private static double PlayQuestion(Question question, int questionNumer, int totalNumberQuestions)
+        {
+            Console.WriteLine($"Question {questionNumer} / {totalNumberQuestions}:");
+            Console.WriteLine(question.Text);
+            Console.WriteLine();
+
+            List<Answer> answers = question.Answers;
+            Console.WriteLine($"You have {answers.Count} options:");
+            for (int i = 1; i <= answers.Count; ++i)
+                Console.WriteLine($"{i}: {answers[i - 1].Text}");
+            Console.Write("Please pick (one or mutilple by typing multiple numers): ");
+
+            string? s = Console.ReadLine();
+            Console.WriteLine();
+
+            if (s is null or "")
+            {
+                bool allIncorrect = true;
+                foreach (Answer a in answers)
+                    if (a.IsAnswerCorrect)
+                        allIncorrect = false;
+                if (allIncorrect)
+                    Console.Write("There are correct answers!");
+                else
+                    Console.WriteLine("You're right; all answers are incorrect.");
+                Console.WriteLine();
+                return 0;
+            }
+            else
+            {
+                double score = 0;
+                Console.WriteLine("You choose:");
+                foreach (char c in s)
+                {
+                    int i = c - '1';
+                    string result = answers[i].IsAnswerCorrect ? "And it's a correct answer" : "But it's a wrong anwser";
+                    double points = answers[i].Score;
+                    Console.WriteLine($"{i + 1} - {answers[i].Text}");
+                    Console.WriteLine($"{result} - points: {points}");
+                    Console.WriteLine();
+                    score += points;
+                }
+                return score;
+            }
         }
     }
 }
