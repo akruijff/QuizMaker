@@ -117,48 +117,84 @@
 
         private static double PlayQuestion(Question question, int questionNumer, int totalNumberQuestions)
         {
+            List<Answer> answers = question.Answers;
+            DisplayQuestion(question, questionNumer, totalNumberQuestions);
+            DisplayOptions(answers);
+            List<int> choices = ReadOptions();
+            bool allIncorrect = IsAllCorrect(answers);
+            double score = CalcuateScore(answers, choices);
+            ProcessPlayerChoice(answers, choices, allIncorrect);
+            return score;
+        }
+
+        private static void DisplayQuestion(Question question, int questionNumer, int totalNumberQuestions)
+        {
             Console.WriteLine($"Question {questionNumer} / {totalNumberQuestions}:");
             Console.WriteLine(question.Text);
             Console.WriteLine();
+        }
 
-            List<Answer> answers = question.Answers;
+        private static List<Answer> DisplayOptions(List<Answer> answers)
+        {
             Console.WriteLine($"You have {answers.Count} options:");
             for (int i = 1; i <= answers.Count; ++i)
                 Console.WriteLine($"{i}: {answers[i - 1].Text}");
-            Console.Write("Please pick (one or mutilple by typing multiple numers): ");
+            return answers;
+        }
 
+        private static bool IsAllCorrect(List<Answer> answers)
+        {
+            bool allIncorrect = true;
+            foreach (Answer a in answers)
+                if (a.IsAnswerCorrect)
+                    allIncorrect = false;
+            return allIncorrect;
+        }
+
+        private static List<int> ReadOptions()
+        {
+            Console.Write("Please pick (one or mutilple by typing multiple numers): ");
             string? s = Console.ReadLine();
             Console.WriteLine();
 
-            if (s is null or "")
+            if (s == null || s == "")
+                return [];
+
+            List<int> choices = new();
+            foreach (char c in s)
+                choices.Add(c - '1');
+            return choices;
+        }
+
+        private static void ProcessPlayerChoice(List<Answer> answers, List<int> choices, bool allIncorrect)
+        {
+            if (choices.Count == 0)
             {
-                bool allIncorrect = true;
-                foreach (Answer a in answers)
-                    if (a.IsAnswerCorrect)
-                        allIncorrect = false;
                 if (allIncorrect)
-                    Console.Write("There are correct answers!");
-                else
                     Console.WriteLine("You're right; all answers are incorrect.");
-                Console.WriteLine();
-                return 0;
+                else
+                    Console.Write("There are correct answers!");
             }
             else
             {
-                double score = 0;
                 Console.WriteLine("You choose:");
-                foreach (char c in s)
+                foreach (int i in choices)
                 {
-                    int i = c - '1';
                     string result = answers[i].IsAnswerCorrect ? "And it's a correct answer" : "But it's a wrong anwser";
                     double points = answers[i].Score;
                     Console.WriteLine($"{i + 1} - {answers[i].Text}");
                     Console.WriteLine($"{result} - points: {points}");
-                    Console.WriteLine();
-                    score += points;
                 }
-                return score;
             }
+            Console.WriteLine();
+        }
+
+        private static double CalcuateScore(List<Answer> answers, List<int> choices)
+        {
+            double score = 0;
+            foreach (int i in choices)
+                score += answers[i].Score;
+            return score;
         }
     }
 }
