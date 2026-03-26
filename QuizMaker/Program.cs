@@ -96,7 +96,7 @@
             Quiz? quiz = Persistence.ReadQuiz(FILE);
             if (quiz is null)
             {
-                Console.WriteLine("There is no quiz stored. Please enter a quiz first.");
+                UI.ShowQuizRequred();
                 return;
             }
 
@@ -106,95 +106,18 @@
             foreach (Question q in questions)
                 score += PlayQuestion(q, ++i, questions.Count());
 
-            Console.WriteLine("FIN");
-            Console.WriteLine($"You're score is: {score}");
-            Console.WriteLine();
-
-            Console.WriteLine("Press any key to continue to the menu");
-            Console.ReadKey(true);
-            Console.WriteLine();
+            UI.DisplayScore(score);
         }
 
         private static double PlayQuestion(Question question, int questionNumer, int totalNumberQuestions)
         {
             List<Answer> answers = question.Answers;
-            DisplayQuestion(question, questionNumer, totalNumberQuestions);
-            DisplayOptions(answers);
-            List<int> choices = ReadOptions();
-            bool allCorrect = IsAllCorrect(answers);
-            double score = CalcuateScore(answers, choices);
-            ProcessPlayerChoice(answers, choices, !allCorrect);
-            return score;
-        }
-
-        private static void DisplayQuestion(Question question, int questionNumer, int totalNumberQuestions)
-        {
-            Console.WriteLine($"Question {questionNumer} / {totalNumberQuestions}:");
-            Console.WriteLine(question.Text);
-            Console.WriteLine();
-        }
-
-        private static List<Answer> DisplayOptions(List<Answer> answers)
-        {
-            Console.WriteLine($"You have {answers.Count} options:");
-            for (int i = 1; i <= answers.Count; ++i)
-                Console.WriteLine($"{i}: {answers[i - 1].Text}");
-            return answers;
-        }
-
-        private static bool IsAllCorrect(List<Answer> answers)
-        {
-            bool allCorrect = false;
-            foreach (Answer a in answers)
-                if (a.IsAnswerCorrect)
-                    allCorrect = true;
-            return allCorrect;
-        }
-
-        private static List<int> ReadOptions()
-        {
-            Console.Write("Please pick (one or mutilple by typing multiple numers): ");
-            string? s = Console.ReadLine();
-            Console.WriteLine();
-
-            if (s == null || s == "")
-                return [];
-
-            List<int> choices = new();
-            foreach (char c in s)
-                if (int.TryParse(c.ToString(), out int result))
-                    choices.Add(c);
-            return choices;
-        }
-
-        private static void ProcessPlayerChoice(List<Answer> answers, List<int> choices, bool allIncorrect)
-        {
-            if (choices.Count == 0)
-            {
-                if (allIncorrect)
-                    Console.WriteLine("You're right; all answers are incorrect.");
-                else
-                    Console.Write("There are correct answers!");
-            }
-            else
-            {
-                Console.WriteLine("You choose:");
-                foreach (int i in choices)
-                {
-                    string result = answers[i].IsAnswerCorrect ? "And it's a correct answer" : "But it's a wrong anwser";
-                    double points = answers[i].Score;
-                    Console.WriteLine($"{i + 1} - {answers[i].Text}");
-                    Console.WriteLine($"{result} - points: {points}");
-                }
-            }
-            Console.WriteLine();
-        }
-
-        private static double CalcuateScore(List<Answer> answers, List<int> choices)
-        {
-            double score = 0;
-            foreach (int i in choices)
-                score += answers[i].Score;
+            UI.DisplayQuestion(question, questionNumer, totalNumberQuestions);
+            UI.DisplayOptions(answers);
+            List<int> choices = UI.ReadOptions();
+            bool allCorrect = Logics.IsAllCorrect(answers);
+            double score = Logics.CalcuateScore(answers, choices);
+            UI.ProcessPlayerChoice(answers, choices, !allCorrect);
             return score;
         }
     }
