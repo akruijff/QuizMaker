@@ -19,7 +19,7 @@
                 Console.Write("There are correct answers!");
             Console.WriteLine();
 
-            return Logics.CalcuateScore(answers, choices);
+            return question.CalcuateScore(choices);
         }
 
         private void DisplayQuestion()

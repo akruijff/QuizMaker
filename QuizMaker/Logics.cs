@@ -10,13 +10,5 @@
                     allCorrect = true;
             return allCorrect;
         }
-
-        public static double CalcuateScore(List<Answer> answers, List<int> choices)
-        {
-            double score = 0;
-            foreach (int i in choices)
-                score += answers[i].Score;
-            return score;
-        }
     }
 }

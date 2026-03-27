@@ -11,5 +11,13 @@
         public override bool Equals(object? obj) => obj is Question other ? Text == other.Text : false;
         public override int GetHashCode() => Text?.GetHashCode() ?? 0;
         public void Add(Answer anwser) => Answers.Add(anwser);
+
+        public double CalcuateScore(List<int> choices)
+        {
+            double score = 0;
+            foreach (int i in choices)
+                score += Answers[i].Score;
+            return score;
+        }
     }
 }
