@@ -13,7 +13,7 @@
 
             if (choices.Count != 0)
                 DisplayAnswers(choices);
-            else if (Logics.IsAllCorrect(answers))
+            else if (question.IsAllCorrect)
                 Console.WriteLine("You're right; all answers are incorrect.");
             else
                 Console.Write("There are correct answers!");

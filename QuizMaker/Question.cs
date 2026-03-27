@@ -4,6 +4,17 @@
     {
         public string Text { get; set; } = "";
         public readonly List<Answer> Answers = [];
+        public bool IsAllCorrect
+        {
+            get
+            {
+                bool allCorrect = false;
+                foreach (Answer a in Answers)
+                    if (a.IsAnswerCorrect)
+                        allCorrect = true;
+                return allCorrect;
+            }
+        }
 
         public Question() { }
         public Question(string s) { Text = s; }
